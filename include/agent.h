@@ -2,50 +2,67 @@
 	Agent class
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef AGENT_H
+#define AGENT_H
+
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+#include <list>
 
 #include <gmp.h>
-#include <paillier.h>
+
+extern "C" 
+{
+  #include <paillier.h>
+}
 
 typedef unsigned long ulong;
 
-Class Agent
+class Agent
 {
-public:
-	Agent();
-	~Agent();
+ public:
+  Agent(std::string id);
+  ~Agent();
 
-	/*
+  void setState(const double st){ state = st;}
+  double getState() { return state;}
+  /*
 		
-	*/
-	int communicate(List<Agent*>& peers);
+   */
+  int communicate(std::list<Agent*>& peers);
 	
 
-	/*
-		Update the internal states
-	*/
-	int update_state();
+  /*
+    Update the internal states
+  */
+  int updateState();
 
-private:
+  int logState();
 
-	/*
+ private:
+
+  /*
 		
-	*/
-	int exchange(const paillier_pubkey_t* pub,
-				 const paillier_ciphertext_t* msg_in,
-				 paillier_ciphertext_t* msg_out);
+   */
+  int exchange(paillier_pubkey_t* pub,
+	       paillier_ciphertext_t* msg_in,
+	       paillier_ciphertext_t* msg_out);
 
-	string id;
-	double state;
+  long ciphertext_to_long(paillier_ciphertext_t* c);
 
-	long int_state;
-	long alpha;
-	long diff_state;
+  long updateAlpha();
 
-	FILE* logfile;
+  std::string id;
+  double state;
+  long alpha;
+  long long_state;
+  long diff_state;
 
-  	paillier_pubkey_t* pubKey;
-  	paillier_prvkey_t* prvKey;
+  FILE* logfile = NULL;
+
+  paillier_pubkey_t* pubKey = NULL;
+  paillier_prvkey_t* prvKey = NULL;
 };
+
+#endif
