@@ -49,7 +49,7 @@ int Agent::communicate(std::list<Agent*>& peers)
 {
   // Convert and encrypt the current state
   // May want to log enc_state
-  long_state = (long) lround(state * STATE_FACTOR);
+  long_state = -(long) lround(state * STATE_FACTOR);
 
   // encrypt the state
   paillier_plaintext_t* m_s = paillier_plaintext_from_ui(long_state);
@@ -79,13 +79,21 @@ int Agent::communicate(std::list<Agent*>& peers)
   return 0;
 }
 
+double Agent::setState(const double st)
+{
+  state = st;
+  // a new state is set, log the state
+  logState();
+  return state;
+}
+
 int Agent::updateState()
 {
   /*
     > convert diff_state to double
     > and add to state 
     > change alpha
-    > log states
+    > log the state
   */
   state += diff_state / ( (double) STATE_FACTOR * ALPHA_FACTOR * ALPHA_FACTOR);
 
@@ -101,14 +109,14 @@ int Agent::logState()
 
 
 /*
-  This function is call by another Agent 
+  This function is called by another Agent 
  */
 int Agent::exchange(paillier_pubkey_t* pub,
 		    paillier_ciphertext_t* msg_in,
 		    paillier_ciphertext_t* msg_out)
 {
   // create the negative of the current state
-  long_state = -(long) lround(state * STATE_FACTOR);
+  long_state = (long) lround(state * STATE_FACTOR);
 
   // encrypt the state
   paillier_plaintext_t* m_s = paillier_plaintext_from_ui(long_state);
@@ -159,6 +167,6 @@ long Agent::ciphertext_to_long(paillier_ciphertext_t* c)
 
 long Agent::updateAlpha()
 {
-  //  return rand() % ALPHA_FACTOR + 1;
-  return ALPHA_FACTOR/2;
+  return rand() % ALPHA_FACTOR + 1;
+  //  return ALPHA_FACTOR/2;
 }

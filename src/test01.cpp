@@ -11,26 +11,25 @@ typedef list<Agent*> AgentList;
 
 int main()
 {
-  const int numAgents = 2;
-  const int maxSteps = 100;
+  const int numAgents = 3;
+  const int maxSteps = 40;
+
+  // The agents are stored in a vector
+  // The graph (neighbors) is stored in a vector of list
   vector<Agent*> nodes(numAgents);
   vector<AgentList> edges(numAgents);
 
   srand(0);
-  
-  // The agents are stored in a vector
-  
-  // The graph (neighbors) is stored in a vector of list
 
   printf("Initialize nodes\n");
   
   char id[32];
-  double state=0;
+  double state;
   for(int i=0; i< numAgents; ++i)
     {
       sprintf(id, "agent_%d", i);
       nodes[i] = new Agent(string(id));
-      state = (rand() % 1000) / 1000.0;
+      state = (rand() % 1000);
       nodes[i]->setState(state);
       //start logging:
       nodes[i]->logState();
@@ -48,23 +47,27 @@ int main()
   for(int i=0; i< maxSteps; ++i)
     {
       printf("Step %2d\n", i);
+      // NOTE: The following steps must be done in seperate steps
+      // TODO: consider pair-wise update
+      // First everyone collect info from neighbors
       for(int j=0; j< numAgents; ++j)
 	{
 	  nodes[j]->communicate(edges[j]);
+	}
+      // Then do update
+      for(int j=0; j< numAgents; ++j)
+	{
 	  nodes[j]->updateState();
 	}
     }
 
-  printf("3\n");
+  printf("Clean up\n");
   // Clean up allocated memory
   edges.clear();
-
-  printf("4\n");
   for(int i=0; i< numAgents; ++i)
     {
       delete nodes[i];
     }
-  printf("5\n");
   nodes.clear();
   return 0;
 }

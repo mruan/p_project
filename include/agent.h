@@ -25,14 +25,15 @@ class Agent
   Agent(std::string id);
   ~Agent();
 
-  void setState(const double st){ state = st;}
+  double setState(const double st);
   double getState() { return state;}
+
   /*
-		
+    Send inquiries to all neighbors and do computation 
+    without updating its states
    */
   int communicate(std::list<Agent*>& peers);
 	
-
   /*
     Update the internal states
   */
@@ -41,9 +42,8 @@ class Agent
   int logState();
 
  private:
-
   /*
-		
+    Process another agent's inquiry
    */
   int exchange(paillier_pubkey_t* pub,
 	       paillier_ciphertext_t* msg_in,
@@ -51,9 +51,11 @@ class Agent
 
   long ciphertext_to_long(paillier_ciphertext_t* c);
 
+  // Generate a new random weight alpha
   long updateAlpha();
 
   std::string id;
+  // For illustrative purpose, state is a scalar
   double state;
   long alpha;
   long long_state;
