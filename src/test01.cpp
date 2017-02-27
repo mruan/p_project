@@ -42,7 +42,7 @@ int main()
   for(int i=0; i< numAgents; ++i)
     {
       edges[i].push_back(nodes[(i+1)%numAgents]);
-      //      edges[i].push_back(nodes[(i+2)%numAgents]);
+      edges[i].push_back(nodes[(i+numAgents-1)%numAgents]);
     }
 
   printf("Main loop\n");
