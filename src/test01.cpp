@@ -11,7 +11,7 @@ typedef list<Agent*> AgentList;
 
 int main()
 {
-  const int numAgents = 5;
+  const int numAgents = 3;
   const int maxSteps = 40;
 
   // The agents are stored in a vector

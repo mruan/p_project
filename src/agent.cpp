@@ -167,6 +167,6 @@ long Agent::ciphertext_to_long(paillier_ciphertext_t* c)
 
 long Agent::updateAlpha()
 {
-  return rand() % ALPHA_FACTOR + 1;
-  //  return ALPHA_FACTOR/2;
+  //return rand() % ALPHA_FACTOR + 1;
+  return ALPHA_FACTOR/2;
 }
