@@ -11,7 +11,7 @@ typedef list<Agent*> AgentList;
 
 int main()
 {
-  const int numAgents = 3;
+  const int numAgents = 5;
   const int maxSteps = 40;
 
   // The agents are stored in a vector
@@ -25,16 +25,18 @@ int main()
   
   char id[32];
   double state;
+  double avg = 0.0;
   for(int i=0; i< numAgents; ++i)
     {
       sprintf(id, "agent_%d", i);
       nodes[i] = new Agent(string(id));
       state = (rand() % 1000);
       nodes[i]->setState(state);
-      //start logging:
-      nodes[i]->logState();
+      // accumulate initial state
+      avg += nodes[i]->getState();
     }
-
+  printf("Initial avg= %lf\n", avg/numAgents);
+  
   printf("Initialize edges\n");
   
   for(int i=0; i< numAgents; ++i)
@@ -46,7 +48,7 @@ int main()
   printf("Main loop\n");
   for(int i=0; i< maxSteps; ++i)
     {
-      printf("Step %2d\n", i);
+      printf("Step %2d: ", i);
       // NOTE: The following steps must be done in seperate steps
       // TODO: consider pair-wise update
       // First everyone collect info from neighbors
@@ -59,6 +61,12 @@ int main()
 	{
 	  nodes[j]->updateState();
 	}
+      avg = 0.0;
+      for(int j=0; j< numAgents; ++j)
+	{
+	  avg += nodes[j]->getState();
+	}
+      printf(" avg= %lf\n", avg/numAgents);
     }
 
   printf("Clean up\n");
