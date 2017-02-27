@@ -21,7 +21,7 @@ int main()
 
   srand(0);
 
-  printf("Initialize nodes\n");
+  printf("Initialize nodes long=%lu\n", sizeof(long));
   
   char id[32];
   double state;

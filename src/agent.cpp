@@ -17,9 +17,6 @@ Agent::Agent(std::string _id)
    long_state(0),
    diff_state(0)
 {
-  // initialize alpha in [1, ALPHA_FACTOR]
-  alpha = updateAlpha();
-
   // Generate key pair
   paillier_keygen(KEY_LENGTH,
 		  &pubKey,
@@ -32,6 +29,8 @@ Agent::Agent(std::string _id)
     {
       printf("%s log open failed\n", id.c_str());
     }
+  
+  alpha = rand() % ALPHA_FACTOR + 1;
 }
 
 Agent::~Agent()
@@ -82,6 +81,9 @@ int Agent::communicate(std::list<Agent*>& peers)
 double Agent::setState(const double st)
 {
   state = st;
+  // initialize alpha in [1, ALPHA_FACTOR]
+  alpha = updateAlpha();
+  
   // a new state is set, log the state
   logState();
   return state;
@@ -100,6 +102,7 @@ int Agent::updateState()
   alpha = updateAlpha();
 
   logState();
+  return 0;
 }
 
 int Agent::logState()
@@ -167,6 +170,7 @@ long Agent::ciphertext_to_long(paillier_ciphertext_t* c)
 
 long Agent::updateAlpha()
 {
-  //return rand() % ALPHA_FACTOR + 1;
-  return ALPHA_FACTOR/2;
+  //  return rand() % ALPHA_FACTOR + 1;
+  //  return ALPHA_FACTOR;
+  return alpha;
 }
