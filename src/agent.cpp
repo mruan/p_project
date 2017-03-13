@@ -5,7 +5,7 @@
 
 #include "agent.h"
 
-#define KEY_LENGTH 512
+#define KEY_LENGTH 128
 #define STATE_FACTOR 10000
 #define ALPHA_FACTOR 10
 //#define ALPHA_RULE rand() % ALPHA_FACTOR + 1
@@ -64,10 +64,15 @@ int Agent::communicate(std::list<Agent*>& peers)
   */
   diff_state = 0;
   long result =0;
+  int i=0;
   for(std::list<Agent*>::iterator it= peers.begin();
       it != peers.end(); ++it)
     {
       (*it)->exchange(pubKey, c_s, c_res);
+      /* For paper submission */
+      printf("%d", i++);
+      gmp_fprintf(logfile, "\t%Zd\t", c_res->c);
+      
       result = ciphertext_to_long(c_res);
       diff_state += alpha * result;
     }
@@ -85,6 +90,7 @@ double Agent::setState(const double st)
   alpha = updateAlpha();
   
   // a new state is set, log the state
+  fprintf(logfile, "0\t0\t");
   logState();
   return state;
 }
@@ -97,7 +103,7 @@ int Agent::updateState()
     > change alpha
     > log the state
   */
-  state += diff_state / ( (double) STATE_FACTOR * ALPHA_FACTOR * ALPHA_FACTOR);
+  state += 0.5* diff_state / ( (double) STATE_FACTOR * ALPHA_FACTOR * ALPHA_FACTOR);
 
   alpha = updateAlpha();
 

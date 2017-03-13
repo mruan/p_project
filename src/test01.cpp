@@ -11,14 +11,14 @@ typedef list<Agent*> AgentList;
 
 int main()
 {
-  const int numAgents = 3;
-  const int maxSteps = 40;
+  const int numAgents = 4;
+  const int maxSteps = 25;
 
   // The agents are stored in a vector
   // The graph (neighbors) is stored in a vector of list
   vector<Agent*> nodes(numAgents);
   vector<AgentList> edges(numAgents);
-
+  double st[4] = {1.0, 4.0, 2.0, 8.0};
   srand(0);
 
   printf("Initialize nodes long=%lu\n", sizeof(long));
@@ -30,7 +30,7 @@ int main()
     {
       sprintf(id, "agent_%d", i);
       nodes[i] = new Agent(string(id));
-      state = (rand() % 1000);
+      state = st[i];//(rand() % 1000);
       nodes[i]->setState(state);
       // accumulate initial state
       avg += nodes[i]->getState();
