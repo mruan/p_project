@@ -22,7 +22,7 @@ typedef unsigned long ulong;
 class Agent
 {
  public:
-  Agent(std::string id);
+  Agent(std::string id, double w=1.0);
   ~Agent();
 
   double setState(const double st);
@@ -57,6 +57,7 @@ class Agent
   std::string id;
   // For illustrative purpose, state is a scalar
   double state;
+  double w;
   long alpha;
   long long_state;
   long diff_state;

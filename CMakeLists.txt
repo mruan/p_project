@@ -7,8 +7,12 @@ link_directories(/usr/local/lib/)
 # Find all source files
 file(GLOB SOURCES "src/*.cpp")
 
-add_executable(test01 ${SOURCES})
+#add_executable(test01 ${SOURCES})
+add_executable(test01 src/test01.cpp src/agent.cpp)
 target_link_libraries(test01 paillier gmp)
+
+add_executable(test02 src/test02.cpp src/agent.cpp)
+target_link_libraries(test02 paillier gmp)
 
 #if (GMP_FOUND)
 #  include_directories(${BZIP_INCLUDE_DIRS})
