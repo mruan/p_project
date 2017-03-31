@@ -15,7 +15,7 @@ Agent::Agent(std::string _id)
    state(0.0),
    alpha(1),
    long_state(0),
-   diff_state(0)
+   mdif_state(0)
 {
   // Generate key pair
   paillier_keygen(KEY_LENGTH,
@@ -60,16 +60,17 @@ int Agent::communicate(std::list<Agent*>& peers)
   /*
     For each peer in the list,
     > Communicate
-    > add to diff_state
+    > add to mdif_state
   */
-  diff_state = 0;
+  mdif_state = 0;
   long result =0;
   for(std::list<Agent*>::iterator it= peers.begin();
       it != peers.end(); ++it)
     {
       (*it)->exchange(pubKey, c_s, c_res);
       result = ciphertext_to_long(c_res);
-      diff_state += alpha * result;
+      if (result > mdif_state)
+	mdif_state = result;
     }
 
   paillier_freeplaintext(m_s);
@@ -92,12 +93,12 @@ double Agent::setState(const double st)
 int Agent::updateState()
 {
   /*
-    > convert diff_state to double
+    > convert mdif_state to double
     > and add to state 
     > change alpha
     > log the state
   */
-  state += diff_state / ( (double) STATE_FACTOR * ALPHA_FACTOR * ALPHA_FACTOR);
+  state += mdif_state / ( (double) STATE_FACTOR * ALPHA_FACTOR);
 
   alpha = updateAlpha();
 
@@ -107,7 +108,7 @@ int Agent::updateState()
 
 int Agent::logState()
 {
-  fprintf(logfile, "%8.4lf\t%2ld\t%ld\n", state, alpha, diff_state);
+  fprintf(logfile, "%8.4lf\t%2ld\t%ld\n", state, alpha, mdif_state);
 }
 
 

@@ -59,7 +59,7 @@ class Agent
   double state;
   long alpha;
   long long_state;
-  long diff_state;
+  long mdif_state;
 
   FILE* logfile = NULL;
 

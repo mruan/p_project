@@ -11,7 +11,7 @@ typedef list<Agent*> AgentList;
 
 int main()
 {
-  const int numAgents = 3;
+  const int numAgents = 10;
   const int maxSteps = 40;
 
   // The agents are stored in a vector
@@ -25,7 +25,7 @@ int main()
   
   char id[32];
   double state;
-  double avg = 0.0;
+  double max_state = 0.0;
   for(int i=0; i< numAgents; ++i)
     {
       sprintf(id, "agent_%d", i);
@@ -33,9 +33,10 @@ int main()
       state = (rand() % 1000);
       nodes[i]->setState(state);
       // accumulate initial state
-      avg += nodes[i]->getState();
+      if(nodes[i]->getState() > max_state)
+	max_state = nodes[i]->getState();
     }
-  printf("Initial avg= %lf\n", avg/numAgents);
+  printf("Initial max= %lf\n", max_state);
   
   printf("Initialize edges\n");
   
@@ -61,7 +62,7 @@ int main()
 	{
 	  nodes[j]->updateState();
 	}
-      avg = 0.0;
+      double avg = 0.0;
       for(int j=0; j< numAgents; ++j)
 	{
 	  avg += nodes[j]->getState();
