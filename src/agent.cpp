@@ -158,7 +158,8 @@ long Agent::ciphertext_to_long(paillier_ciphertext_t* c)
   long int e = 0;
   //  assert( nBytes > sizeof(a));
   //  for(int i=nBytes-1; i >= nBytes-sizeof(a); --i)
-  for(int i= nBytes-sizeof(long); i < nBytes; i++)
+  //  for(int i= nBytes-sizeof(long); i < nBytes; i++)
+  for(int i=0; i< nBytes; i++)
   {
       e = (e << 8) | bytes[i];
   }
