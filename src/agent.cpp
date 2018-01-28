@@ -7,7 +7,7 @@
 
 #define KEY_LENGTH 512
 #define STATE_FACTOR 10000
-#define ALPHA_FACTOR 10
+#define ALPHA_FACTOR 1000
 //#define ALPHA_RULE rand() % ALPHA_FACTOR + 1
 
 Agent::Agent(std::string _id)
@@ -30,7 +30,14 @@ Agent::Agent(std::string _id)
       printf("%s log open failed\n", id.c_str());
     }
   
-  alpha = rand() % ALPHA_FACTOR + 1;
+  // The initial alpha could be zero or negative.
+  alpha = rand() % ALPHA_FACTOR;
+  // with 50% change alpha could be negative
+  if ((rand()%2)==0)
+    {
+      //      printf("negative state\n");
+      alpha = -alpha;
+    }
 }
 
 Agent::~Agent()
@@ -82,7 +89,7 @@ double Agent::setState(const double st)
 {
   state = st;
   // initialize alpha in [1, ALPHA_FACTOR]
-  alpha = updateAlpha();
+  //alpha = updateAlpha();
   
   // a new state is set, log the state
   logState();
@@ -102,6 +109,7 @@ int Agent::updateState()
   alpha = updateAlpha();
 
   logState();
+
   return 0;
 }
 

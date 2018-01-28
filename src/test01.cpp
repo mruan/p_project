@@ -11,7 +11,7 @@ typedef list<Agent*> AgentList;
 
 int main()
 {
-  const int numAgents = 3;
+  const int numAgents = 5;
   const int maxSteps = 40;
 
   // The agents are stored in a vector
@@ -19,7 +19,7 @@ int main()
   vector<Agent*> nodes(numAgents);
   vector<AgentList> edges(numAgents);
 
-  srand(0);
+  //  srand(10);
 
   printf("Initialize nodes long=%lu\n", sizeof(long));
   
